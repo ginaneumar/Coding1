@@ -1,3 +1,4 @@
 function changeText() {
-    document.getElementById("my-paragraph").innerHTML = "The text has changed!";
+    var myParagraph = document.getElementById("my-paragraph");
+    myParagraph.innerHTML = "The text has changed!";
   }
