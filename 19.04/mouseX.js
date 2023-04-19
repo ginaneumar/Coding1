@@ -30,6 +30,5 @@ function draw() {
     fill(255);
     textSize(60);
     //text("FALSE",width/2, height/2)
-    
   }
 }
