@@ -31,9 +31,10 @@ canvas.addEventListener('mousemove', event => {
   const x = Math.floor(mouseX / size);
   const y = Math.floor(mouseY / size);
 
-  const red = x * 80;
-  const green = y * 80;
-  const blue = 255 - (x * 80);
+  const red = Math.floor(Math.random() * 256);
+  const green = Math.floor(Math.random() * 256);
+  const blue = Math.floor(Math.random() * 256);
+
 
   ctx.fillStyle = `rgb(${red}, ${green}, ${blue})`;
   ctx.beginPath();
