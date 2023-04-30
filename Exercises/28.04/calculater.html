@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>calculator</title>
+  </head>
+  <body>
+    <h1>calculator</h1>
+    <p>
+      1. Fn =n * n; Fi= 1 <br />
+      2. Fn = Fn-1 * 2; F1 = 1<br />
+      3. Fn = Fn-1 + Fn-2; F1 = F2 = 1<br />
+      4. Fn = nth prime number; F1 = 2<br />
+    </p>
+    <p>Enter the series number (1-4):</p>
+    <input
+      type="number"
+      id="seriesNum"
+      name="seriesNum"
+      min="1"
+      max="4"
+      required
+    />
+    <p>Enter the number of elements to calculate:</p>
+    <input type="number" id="numElements" name="numElements" required />
+    <p>Enter the value of Fn:</p>
+    <input type="number" id="fnValue" name="fnValue" />
+    <br />
+    <button onclick="calculate()">Calculate Series</button>
+    <br />
+    <div id="seriesOutput"></div>
+    <script src="calculater.js"></script>
+  </body>
+</html>

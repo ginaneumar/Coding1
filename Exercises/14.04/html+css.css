@@ -1,0 +1,57 @@
+.kategorie {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: x-large;
+  }
+
+  
+  .tile-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .tile {
+    flex-basis: calc(25% - 20px); 
+    margin-bottom: 20px;
+  }
+  
+  @media only screen and (max-width: 768px) {
+    .tile {
+      flex-basis: calc(33.33% - 20px); 
+    }
+  }
+  
+  @media only screen and (max-width: 480px) {
+    .tile {
+      flex-basis: calc(50% - 20px); 
+    }
+  }
+  
+  @media only screen and (max-width: 320px) {
+    .tile {
+      flex-basis: 100%; 
+    }
+  }
+  
+  .tile img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .tile h3 {
+    font-size: 20px;
+    margin: 10px 0;
+  }
+  
+  .tile p {
+    font-size: 16px;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  
+  .tile .preis {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
