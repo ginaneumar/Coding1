@@ -3,7 +3,7 @@ const ctx = canvas.getContext('2d');
 
 const width = 500;
 const height = 500;
-const size = 50;
+const size = 50; //größe einzelner Kreise
 
 canvas.width = width;
 canvas.height = height;
@@ -23,21 +23,21 @@ for (let i = 0; i < 10; i++) {
   }
 }
 
-canvas.addEventListener('mousemove', event => {
-  const rect = canvas.getBoundingClientRect();
+canvas.addEventListener('mousemove', event => { //mouse Hover event
+  const rect = canvas.getBoundingClientRect(); //mausposition zum canvas
   const mouseX = event.clientX - rect.left;
   const mouseY = event.clientY - rect.top;
 
   const x = Math.floor(mouseX / size);
   const y = Math.floor(mouseY / size);
 
-  const red = Math.floor(Math.random() * 256);
+  const red = Math.floor(Math.random() * 256); //Random farbe wen drüber hovern 
   const green = Math.floor(Math.random() * 256);
   const blue = Math.floor(Math.random() * 256);
 
 
-  ctx.fillStyle = `rgb(${red}, ${green}, ${blue})`;
-  ctx.beginPath();
-  ctx.arc(x * size + size / 2, y * size + size / 2, size / 2, 0, 2 * Math.PI);
+  ctx.fillStyle = `rgb(${red}, ${green}, ${blue})`; //
+  ctx.beginPath(); 
+  ctx.arc(x * size + size / 2, y * size + size / 2, size / 2, 0, 2 * Math.PI);//Kreise zeichnen
   ctx.fill();
 });
