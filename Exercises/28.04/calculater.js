@@ -2,16 +2,16 @@ function calculate() {
   var seriesNum = document.getElementById("seriesNum").value;
   var numElements = document.getElementById("numElements").value;
   var fnValue = document.getElementById("fnValue").value;
-  var output = "";
+  var output = ""; // leere Variable
 
   switch (seriesNum) {
     case "1":
       var Fn = fnValue || 1;
-      output += Fn + ", ";
-      for (var i = 2; i <= numElements; i++) {
+      output += Fn + ", "; //Startwert zur Ausgabe hinzufügen
+      for (var i = 2; i <= numElements; i++) { //Schleife für die restlichen elemente
         Fn = i * i;
-        output += Fn;
-        if (i != numElements) output += ", "; //kein Komma am Ende
+        output += Fn; // Ergebnis wird an Ausgabe hinzugefügt
+        if (i != numElements) output += ", "; //kein Komma am Ende falls letzes Element 
       }
       break;
 
