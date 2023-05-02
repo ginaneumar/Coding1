@@ -31,7 +31,7 @@ canvas.addEventListener('mousemove', event => { //mouse Hover event
   const x = Math.floor(mouseX / size);
   const y = Math.floor(mouseY / size);
 
-  const red = Math.floor(Math.random() * 256); //Random farbe wen drüber hovern 
+  const red = Math.floor(Math.random() * 256); //Random farbe wenn man drüber hovern 
   const green = Math.floor(Math.random() * 256);
   const blue = Math.floor(Math.random() * 256);
 
