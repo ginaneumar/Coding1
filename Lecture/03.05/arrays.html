@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        
+    const fruits = ["apple", "banana", "cherry", "orange", "pear"];
+
+    // Die slice() Methode verwenden, um einen Teil des Arrays zu kopieren
+    const slicedFruits = fruits.slice(1, 3); // Kopiert die Elemente an den Indexpositionen 1 und 2 (nicht inklusive 3)
+    console.log(slicedFruits); // ["banana", "cherry"]
+
+    // Die map() Methode verwenden, um jedes Element im Array zu verarbeiten
+    const mappedFruits = fruits.map(function(fruit) {
+    return fruit.toUpperCase(); // Wandelt das Element in Großbuchstaben um
+});
+    console.log(mappedFruits); // Output: ["APPLE", "BANANA", "CHERRY", "ORANGE", "PEAR"]
+
+    // Die reverse() Methode verwenden, um das Array umzukehren
+    const reversedFruits = fruits.reverse();
+    console.log(reversedFruits); // Output: ["pear", "orange", "cherry", "banana", "apple"]
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
