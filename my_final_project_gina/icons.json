@@ -1,0 +1,143 @@
+[
+  {
+    "name": "bamboo",
+    "url": "icons/bamboo.png"
+  },
+  {
+    "name": "bear",
+    "url": "icons/bear.png"
+  },
+  {
+    "name": "bonsai",
+    "url": "icons/bonsai.png"
+  },
+  {
+    "name": "carp-fish",
+    "url": "icons/carp-fish.png"
+  },
+  {
+    "name": "castle",
+    "url": "icons/castle.png"
+  },
+  {
+    "name": "cherry-blossom",
+    "url": "icons/cherry-blossom.png"
+  },
+  {
+    "name": "deer",
+    "url": "icons/deer.png"
+  },
+  {
+    "name": "farm",
+    "url": "icons/farm.png"
+  },
+  {
+    "name": "fox",
+    "url": "icons/fox.png"
+  },
+  {
+    "name": "fuji-mountain",
+    "url": "icons/fuji-mountain.png"
+  },
+  {
+    "name": "garden",
+    "url": "icons/garden.png"
+  },
+  {
+    "name": "gree-tea",
+    "url": "icons/green-tea.png"
+  },
+  {
+    "name": "japanese-food",
+    "url": "icons/japanese-food.png"
+  },
+  {
+    "name": "kabuki",
+    "url": "icons/kabuki.png"
+  },
+  {
+    "name": "karate",
+    "url": "icons/karate.png"
+  },
+  {
+    "name": "kendo",
+    "url": "icons/kendo.png"
+  },
+  {
+    "name": "koi-fish",
+    "url": "icons/koi-fish.png"
+  },
+  {
+    "name": "lucky-cat",
+    "url": "icons/lucky-cat.png"
+  },
+  {
+    "name": "monk",
+    "url": "icons/monk.png"
+  },
+  {
+    "name": "monkey",
+    "url": "icons/monkey.png"
+  },
+  {
+    "name": "ninja",
+    "url": "icons/ninja.png"
+  },
+  {
+    "name": "onigiri",
+    "url": "icons/onigiri.png"
+  },
+  {
+    "name": "onsen",
+    "url": "icons/onsen.png"
+  },
+  {
+    "name": "ramen",
+    "url": "icons/ramen.png"
+  },
+  {
+    "name": "samurai_2",
+    "url": "icons/samurai_2.png"
+  },
+  {
+    "name": "samurai",
+    "url": "icons/samurai.png"
+  },
+  {
+    "name": "shibainu",
+    "url": "icons/shibainu.png"
+  },
+  {
+    "name": "shinkansen",
+    "url": "icons/shinkansen.png"
+  },
+  {
+    "name": "shrine",
+    "url": "icons/shrine.png"
+  },
+  {
+    "name": "sumo",
+    "url": "icons/sumo.png"
+  },
+  {
+    "name": "sushi",
+    "url": "icons/sushi.png"
+  },
+  {
+    "name": "temple",
+    "url": "icons/temple.png"
+  },
+  {
+    "name": "tokyo-tower",
+    "url": "icons/tokyo-tower.png"
+  },
+  {
+    "name": "umbrella",
+    "url": "icons/umbrella.png"
+  },
+  {
+    "name": "wave",
+    "url": "icons/wave.png"
+  }
+
+]
