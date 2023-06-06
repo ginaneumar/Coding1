@@ -78,5 +78,65 @@
   {
     "name": "monkey",
     "image": "icons/monkey.png"
+  },
+  {
+    "name": "ninja",
+    "image": "icons/ninja.png"
+  },
+  {
+    "name": "onigiri",
+    "image": "icons/onigiri.png"
+  },
+  {
+    "name": "onsen",
+    "image": "icons/onsen.png"
+  },
+  {
+    "name": "ramen",
+    "image": "icons/ramen.png"
+  },
+  {
+    "name": "samurai_2",
+    "image": "icons/samurai_2.png"
+  },
+  {
+    "name": "samurai",
+    "image": "icons/samurai.png"
+  },
+  {
+    "name": "shibainu",
+    "image": "icons/shibainu.png"
+  },
+  {
+    "name": "shinkansen",
+    "image": "icons/shinkansen.png"
+  },
+  {
+    "name": "shrine",
+    "image": "icons/shrine.png"
+  },
+  {
+    "name": "sumo",
+    "image": "icons/sumo.png"
+  },
+  {
+    "name": "sushi",
+    "image": "icons/sushi.png"
+  },
+  {
+    "name": "temple",
+    "image": "icons/temple.png"
+  },
+  {
+    "name": "tokyo-tower",
+    "image": "icons/tokyo-tower.png"
+  },
+  {
+    "name": "umbrella",
+    "image": "icons/umbrella.png"
+  },
+  {
+    "name": "wave",
+    "image": "icons/wave.png"
   }
 ]

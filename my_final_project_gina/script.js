@@ -1,40 +1,66 @@
-const gridContainer = document.querySelector(".grid-container");
-let cards = []; // Array to store the card initialize
+const gridContainer = document.querySelector(".grid-container"); // Select grid container element
+let cards = []; // Array to store the cards
 
-fetch("cards.json") //loading icons from JSON File
+// Load JSON data and generate cards after data is fetched
+fetch("cards.json")
   .then((res) => res.json())
   .then((data) => {
-    //dupicate icons for card pairs
-    cards = [...data, ...data];
-    shuffleCards();
-    generateCards();
+    cards = [...data, ...data]; // Create card pairs by duplicating the data
+    shuffleCards(); // Shuffle the cards randomly
+    generateCards(); // Generate the cards in the grid
   });
 
+// Function to shuffle the cards using the Fisher-Yates algorithm, but i got a simpler version
 function shuffleCards() {
-  for (let i = cards.length - 1; i > 0; i--) {
-    const randomIndex = Math.floor(Math.random() * (i + 1));
-    [cards[i], cards[randomIndex]] = [cards[randomIndex], cards[i]];
-  }
+  cards.sort(() => Math.random() - 0.5);
 }
 
+// Function to generate the cards in the grid
 function generateCards() {
-  const numCards = 8 * 5; // Anzahl der gewünschten Karten (8 Spalten x 5 Reihen)
+  const numCards = 8 * 5; // Number of cards in the grid
 
-  for (let i = 0; i < numCards; i++) {
-    // Überprüfe, ob alle Karten bereits generiert wurden
-    if (i >= cards.length) {
-      break;
-    }
+  for (let i = 0; i < numCards && i < cards.length; i++) {
+    const card = document.createElement("div"); // Create a new div element for the card
+    card.classList.add("card"); // Add the 'card' class to the card element
+    card.setAttribute("data-index", i); // Store the card index as a data attribute
 
-    const card = document.createElement("div");
-    card.classList.add("card");
-    card.innerHTML = `
-      <div class="card-front">
-        <img src="${cards[i].icon}" alt="Card Icon">
-      </div>
-      <div class="card-back"></div>
-    `;
-    gridContainer.appendChild(card);
+    // Create the front face of the card
+    const frontFace = document.createElement("div");
+    frontFace.classList.add("card-front"); // Add the 'card-front' class to the front face element
+
+    // Create the image element for the backside of the card
+    const backsideImg = document.createElement("img");
+    backsideImg.src = "backside.jpeg"; // Set the image source
+    backsideImg.alt = "Card Back"; // Set the alt attribute for accessibility
+
+    frontFace.appendChild(backsideImg); // Append the backside image to the front face
+    card.appendChild(frontFace); // Append the front face to the card
+
+    // Create the back face of the card
+    const backFace = document.createElement("div");
+    backFace.classList.add("card-back"); // Add the 'card-back' class to the back face element
+
+    // Create the image element for the card icon
+    const backImg = document.createElement("img");
+    backImg.src = cards[i].image; // Set the image source from the JSON data
+    backImg.alt = "Card Icon"; // Set the alt attribute for accessibility
+    backImg.style.visibility = "hidden"; // Hide the backside image initially
+    backImg.style.backgroundColor = "white"; // Set the background color of the image to white
+
+    backFace.appendChild(backImg); // Append the card icon image to the back face
+    card.appendChild(backFace); // Append the back face to the card
+
+    gridContainer.appendChild(card); // Append the card to the grid container
+
+    // Add event listener to flip the card on click
+    card.addEventListener("click", () => {
+      const index = card.dataset.index; // Get the card index from the data attribute
+      card.classList.add("flipped"); // Add the 'flipped' class to the card to trigger the flip animation
+
+      setTimeout(() => {
+        backImg.style.visibility = "visible"; // Show the card image after the card is flipped
+        frontFace.style.transform = "rotateY(180deg)"; // Flip the card by rotating it around the Y-axis
+      }, 100); // Delay for revealing the card icon and flipping the card
+    });
   }
 }
-
