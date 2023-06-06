@@ -1,0 +1,82 @@
+[
+  {
+    "image": "icons/bamboo.png",
+    "name": "bamboo"
+  },
+  {
+    "name": "bear",
+    "image": "icons/bear.png"
+  },
+  {
+    "name": "bonsai",
+    "image": "icons/bonsai.png"
+  },
+  {
+    "name": "carp-fish",
+    "image": "icons/carp-fish.png"
+  },
+  {
+    "name": "castle",
+    "image": "icons/castle.png"
+  },
+  {
+    "name": "cherry-blossom",
+    "image": "icons/cherry-blossom.png"
+  },
+  {
+    "name": "deer",
+    "image": "icons/deer.png"
+  },
+  {
+    "name": "farm",
+    "image": "icons/farm.png"
+  },
+  {
+    "name": "fox",
+    "image": "icons/fox.png"
+  },
+  {
+    "name": "fuji-mountain",
+    "image": "icons/fuji-mountain.png"
+  },
+  {
+    "name": "garden",
+    "image": "icons/garden.png"
+  },
+  {
+    "name": "gree-tea",
+    "image": "icons/green-tea.png"
+  },
+  {
+    "name": "japanese-food",
+    "image": "icons/japanese-food.png"
+  },
+  {
+    "name": "kabuki",
+    "image": "icons/kabuki.png"
+  },
+  {
+    "name": "karate",
+    "image": "icons/karate.png"
+  },
+  {
+    "name": "kendo",
+    "image": "icons/kendo.png"
+  },
+  {
+    "name": "koi-fish",
+    "image": "icons/koi-fish.png"
+  },
+  {
+    "name": "lucky-cat",
+    "image": "icons/lucky-cat.png"
+  },
+  {
+    "name": "monk",
+    "image": "icons/monk.png"
+  },
+  {
+    "name": "monkey",
+    "image": "icons/monkey.png"
+  }
+]
