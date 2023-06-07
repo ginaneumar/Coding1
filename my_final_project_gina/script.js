@@ -55,12 +55,21 @@ function generateCards() {
     // Add event listener to flip the card on click
     card.addEventListener("click", () => {
       const index = card.dataset.index; // Get the card index from the data attribute
-      card.classList.add("flipped"); // Add the 'flipped' class to the card to trigger the flip animation
+      const isFlipped = card.classList.contains("flipped"); // already flipped?
 
-      setTimeout(() => {
-        backImg.style.visibility = "visible"; // Show the card image after the card is flipped
-        frontFace.style.transform = "rotateY(180deg)"; // Flip the card by rotating it around the Y-axis
-      }, 100); // Delay for revealing the card icon and flipping the card
+      if (!isFlipped && flippedCards.length < 2) { // < 2 card can be flipped 
+        card.classList.add("flipped"); 
+        flippedCards.push(card); //add to Array
+
+        setTimeout(() => {
+          backImg.style.visibility = "visible";  // icon visible
+          frontFace.style.transform = "rotateY(180deg)"; //flippen
+
+          if (flippedCards.length === 2) { //by 2 card compare them
+            compareCards();
+          }
+        }, 100);
+      }
     });
   }
 }
