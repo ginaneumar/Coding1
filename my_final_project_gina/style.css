@@ -41,7 +41,7 @@ h1 {
 }
 
 .card-back {
-  background-image: url("backside.jpeg");
+  background-image: url("frontside.jpeg");
   background-size: auto;
 }
 
