@@ -93,7 +93,7 @@ function compareCards() {
         card1.innerHTML = ""; // empty card
         card2.innerHTML = "";
 
-        card1.style.border = "none"; //remove border too so its really empty 
+        card1.style.border = "none"; //remove border too so its really empty
         card2.style.border = "none";
 
         checkGameEnd();
@@ -112,6 +112,26 @@ function compareCards() {
   }
 }
 
+// Restart button event listener
+const restartButton = document.querySelector("#restart-button");
+restartButton.addEventListener("click", restartGame);
+
+// Restart the game function
+function restartGame() {
+  gridContainer.innerHTML = ""; // Clear the grid container
+  flippedCards = []; // Reset flipped cards array
+  isLocked = false; // Unlock cards
+
+  // Load JSON data and generate cards after data is fetched
+  fetch("cards.json")
+    .then((res) => res.json())
+    .then((data) => {
+      cards = [...data, ...data]; // Create card pairs by duplicating the data
+      shuffleCards();
+      generateCards();
+    });
+}
+
 function flipCard(card) {
   const frontFace = card.querySelector(".card-front");
   const backImg = card.querySelector(".card-back img");
@@ -122,7 +142,6 @@ function flipCard(card) {
     backImg.style.visibility = "hidden";
   }, 100);
 }
-
 
 function checkGameEnd() {
   const flippedCards = document.querySelectorAll(".card.flipped");
