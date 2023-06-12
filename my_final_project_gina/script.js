@@ -2,6 +2,8 @@ const gridContainer = document.querySelector(".grid-container"); // Select grid 
 let cards = []; // Array to store the cards
 let flippedCards = [];
 
+let isLocked = false;
+
 // Load JSON data and generate cards after data is fetched
 fetch("cards.json")
   .then((res) => res.json())
@@ -58,19 +60,75 @@ function generateCards() {
       const index = card.dataset.index; // Get the card index from the data attribute
       const isFlipped = card.classList.contains("flipped"); // already flipped?
 
-      if (!isFlipped && flippedCards.length < 2) { // < 2 card can be flipped 
-        card.classList.add("flipped"); 
+      if (!isFlipped && !isLocked) {
+        // < 2 card can be flipped
+        card.classList.add("flipped");
         flippedCards.push(card); //add to Array
 
         setTimeout(() => {
-          backImg.style.visibility = "visible";  // icon visible
+          backImg.style.visibility = "visible"; // icon visible
           frontFace.style.transform = "rotateY(180deg)"; //flippen
 
-          if (flippedCards.length === 2) { //by 2 card compare them
+          if (flippedCards.length === 2) {
+            //by 2 card compare them
             compareCards();
           }
         }, 100);
       }
     });
+  }
+}
+
+function compareCards() {
+  if (flippedCards.length === 2) {
+    isLocked = true; // lock other cards
+    const card1 = flippedCards[0];
+    const card2 = flippedCards[1];
+
+    const symbol1 = cards[parseInt(card1.dataset.index)].name;
+    const symbol2 = cards[parseInt(card2.dataset.index)].name;
+
+    if (symbol1 === symbol2) {
+      setTimeout(() => {
+        card1.innerHTML = ""; // empty card
+        card2.innerHTML = "";
+
+        card1.style.border = "none"; //remove border too so its really empty 
+        card2.style.border = "none";
+
+        checkGameEnd();
+        isLocked = false; // remove the lock
+      }, 1000);
+    } else {
+      setTimeout(() => {
+        flipCard(card1);
+        flipCard(card2);
+
+        isLocked = false;
+      }, 1000);
+    }
+
+    flippedCards = [];
+  }
+}
+
+function flipCard(card) {
+  const frontFace = card.querySelector(".card-front");
+  const backImg = card.querySelector(".card-back img");
+
+  card.classList.remove("flipped");
+  setTimeout(() => {
+    frontFace.style.transform = "rotateY(0)";
+    backImg.style.visibility = "hidden";
+  }, 100);
+}
+
+
+function checkGameEnd() {
+  const flippedCards = document.querySelectorAll(".card.flipped");
+
+  if (flippedCards.length === cards.length) {
+    // Das Spiel ist beendet
+    console.log("Spiel beendet!");
   }
 }
