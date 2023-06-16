@@ -8,13 +8,39 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
   <body>
-    <h1>Memory</h1>
-    <div class="container">
-      <div class="grid-container">
-        
-      </div>
-      <button id="restart-button">Restart</button>
+    <div class="difficulty-container">
+      <label for="difficulty">Difficulty:</label>
+      <select id="difficulty">
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+        <option value="extra-hard">Extra Hard</option>
+      </select>
+      <button id="start-button">Start Game</button>
     </div>
+
+    <div class="game-container">
+      <h1>Memory</h1>
+
+      <div class="container">
+        <div class="grid-container"></div>
+        <div class="score-container">
+          <span id="score">Score: 0</span>
+        </div>
+        <div class="button-container">
+          <button id="restart-button">Restart</button>
+        </div>
+      </div>
+      <div id="timer">00:00</div>
+    </div>
+
+    <!-- <div id="win-screen">
+      <div class="win-screen-content">
+        <h2>Congratulations!</h2>
+        <p>You won the game!</p>
+        <button id="restart-button-win">Play Again</button>
+      </div>
+    </div> -->
 
     <script type="text/javascript" src="script.js"></script>
   </body>
