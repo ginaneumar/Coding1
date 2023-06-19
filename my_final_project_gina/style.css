@@ -33,7 +33,6 @@ h1 {
   margin-bottom: 10px;
   position: fixed;
   top: 10px;
-  /* left: 30px;  */
   right: 30px;
 }
 
@@ -41,6 +40,7 @@ h1 {
   font-size: 24px;
   margin-right: 10px;
 }
+
 
 .button-container {
   display: flex;
@@ -55,7 +55,7 @@ h1 {
 #restart-button {
   margin-top: 20px;
   padding: 10px 20px;
-  background-color: #f5f5f5;
+  background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 20px;
@@ -73,7 +73,7 @@ h1 {
   margin-bottom: 20px;
   min-height: calc(100vh - 150px);
   max-height: calc(100vh - 150px);
-  max-width: 60vw;
+  max-width: 80vw;
 }
 
 .card {
@@ -153,7 +153,41 @@ h1 {
   display: none;
 }
 
-/* #win-screen {
+#mute-button {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#mute-button img {
+  width: 100%;
+  height: 100%;
+}
+
+#mute-button.active img.sound-off-icon {
+  display: block;
+}
+
+#mute-button.active img.sound-on-icon {
+  display: none;
+}
+
+#mute-button:not(.active) img.sound-off-icon {
+  display: none;
+}
+
+#mute-button:not(.active) img.sound-on-icon {
+  display: block;
+}
+#win-screen {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -165,16 +199,17 @@ h1 {
   left: 0;
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
+  text-align: center; /* Center the text horizontally */
 }
 
 #win-screen h2 {
   font-size: 32px;
-  margin-bottom: 16px;
+  margin: 150px 0 16px; /* Adjust the top margin to move the text down */
 }
 
 #win-screen p {
   font-size: 24px;
-  margin-bottom: 24px;
+  margin: 20px 0 24px; /* Adjust the top margin to move the text down */
 }
 
 #win-screen button {
@@ -185,4 +220,23 @@ h1 {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+/* .multiplayer {
+  margin-bottom: 20px;
+  text-align: center; 
+}
+
+.multiplayer label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.multiplayer input[type="number"] {
+  width: 100px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  margin: 0 auto; 
 } */

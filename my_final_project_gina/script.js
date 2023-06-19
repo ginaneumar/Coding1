@@ -1,3 +1,4 @@
+//important elements
 const gridContainer = document.querySelector(".grid-container");
 const timerElement = document.querySelector("#timer");
 const scoreElement = document.querySelector("#score");
@@ -6,28 +7,46 @@ const gameContainer = document.querySelector(".game-container");
 const startButton = document.querySelector("#start-button");
 const restartButton = document.querySelector("#restart-button");
 
+//Sound
+const muteButton = document.querySelector("#mute-button");
+const soundOnIcon = document.querySelector("#mute-button .sound-on-icon");
+const soundOffIcon = document.querySelector("#mute-button .sound-off-icon");
+
 const flipSound = new Audio("./sounds/notification-sound-7062.mp3");
 const collectSound = new Audio("collect_sound.mp3");
-const dealSound = new Audio("./sounds/daisy_wheel_word_processor-29353.mp3");
+const dealSound = new Audio("./sounds/fast-simple-chop-5-6270.mp3");
 const matchingPair = new Audio("./sounds/game-bonus-144751.mp3");
 const gameSound = new Audio(
   "./sounds/comfort-atmosphere-pleasant-atmosphere-deep-thought-153275.mp3"
 );
 
-gameSound.loop = true; // Enable looping
+//win
+const winScreen = document.getElementById("win-screen");
+const winScore = document.getElementById("win-score");
+const winTime = document.getElementById("win-time");
+const restartButtonWin = document.getElementById("restart-button-win");
 
+gameSound.loop = true;
+
+//variables
 let cards = [];
 let flippedCards = [];
 let isLocked = false;
 let score = 0;
 let timerInterval;
 let startTime;
+let isMuted = false;
 
 // Start game button event listener
 startButton.addEventListener("click", startGame);
 
 // Restart button event listener
 restartButton.addEventListener("click", restartGame);
+
+//mute button
+muteButton.addEventListener("click", toggleMute);
+
+restartButtonWin.addEventListener("click", restartGame);
 
 // Load JSON data and start the game after data is fetched
 function loadCardsAndStartGame(numPairs) {
@@ -92,7 +111,13 @@ function createCard(index) {
   backImg.src = cards[index].image;
   backImg.style.visibility = "hidden";
   backImg.style.backgroundColor = "white";
+
+  //test
+  backFace.innerHTML = cards[index].name;
+  //test
+
   backFace.appendChild(backImg);
+
   card.appendChild(backFace);
 
   card.style.visibility = "hidden";
@@ -105,10 +130,11 @@ function createCard(index) {
     }, 100);
 
     const numPairs = cards.length / 2;
-    const animationDuration = numPairs * 100; // Assuming 100ms per card
+    const animationDuration = numPairs * 500; // Assuming 100ms per card
 
     dealSound.currentTime = 0; // Reset the current time of the sound
     dealSound.play(); // Play the deal sound
+    flipSound.volume = 0.008;
 
     setTimeout(() => {
       dealSound.pause(); // Pause the deal sound after the calculated duration
@@ -129,6 +155,7 @@ gridContainer.addEventListener("click", (event) => {
   if (!isFlipped) {
     flipSound.currentTime = 0; // Reset the current time of the sound
     flipSound.play(); // Play the flip sound
+    flipSound.volume = 0.08;
 
     card.classList.add("flipped");
     flippedCards.push(card);
@@ -158,6 +185,7 @@ function compareCards() {
 
     if (symbol1 === symbol2) {
       matchingPair.play();
+      matchingPair.volume = 0.08;
       setTimeout(() => {
         clearCard(card1);
         clearCard(card2);
@@ -208,19 +236,19 @@ function checkGameEnd() {
   if (flippedCards.length === cards.length) {
     console.log("Game Over!");
     stopTimer();
-    // winScreen();
+
+    const endTime = new Date().getTime();
+    const elapsedTime = (endTime - startTime) / 1000;
+    const minutes = Math.floor(elapsedTime / 60);
+    const seconds = Math.floor(elapsedTime % 60);
+
+    winScore.textContent = `Score: ${score + 1}`;
+    winTime.textContent = `Time: ${formatTime(minutes)}:${formatTime(seconds)}`;
+
+    gameContainer.style.display = "none";
+    winScreen.style.display = "block";
   }
 }
-
-
-// function winScreen() {
-//   const winScreen = document.querySelector("#win-screen");
-//   winScreen.style.display = "block";
-
-//   // Add event listener to the "Play Again" button
-//   const playAgainButton = document.querySelector("#restart-button-win");
-//   playAgainButton.addEventListener("click", restartGame);
-// }
 
 // Update the score element
 function updateScore() {
@@ -285,17 +313,70 @@ function startGame() {
   loadCardsAndStartGame(numPairs);
 
   gameSound.play();
-  gameSound.volume = 0.03; // Set the volume to 50%
+  gameSound.volume = 0.008;
 
   difficultyContainer.style.display = "none";
   gameContainer.style.display = "block";
 }
 
+function toggleMute() {
+  isMuted = !isMuted;
+
+  if (isMuted) {
+    soundOnIcon.style.display = "none";
+    soundOffIcon.style.display = "inline-block";
+    setAllSoundsMuted(true);
+  } else {
+    soundOnIcon.style.display = "inline-block";
+    soundOffIcon.style.display = "none";
+    setAllSoundsMuted(false);
+  }
+}
+
+function setAllSoundsMuted(muted) {
+  flipSound.muted = muted;
+  collectSound.muted = muted;
+  dealSound.muted = muted;
+  matchingPair.muted = muted;
+  gameSound.muted = muted;
+}
+
 // Restart the game
 function restartGame() {
-  // winScreen.style.display = "none";
+  winScreen.style.display = "none";
   difficultyContainer.style.display = "block";
-  gameContainer.style.display = "none";
+
+  // Reset game variables
+  flippedCards = [];
+  isLocked = false;
+  score = 0;
+  updateScore();
+  stopTimer();
+
+  // Clear the grid container
+  gridContainer.innerHTML = "";
+
+  // Stop and reset all sounds
+  flipSound.pause();
+  flipSound.currentTime = 0;
+  collectSound.pause();
+  collectSound.currentTime = 0;
+  dealSound.pause();
+  dealSound.currentTime = 0;
+  matchingPair.pause();
+  matchingPair.currentTime = 0;
+  gameSound.pause();
+  gameSound.currentTime = 0;
+
+  // Reset mute button state
+  isMuted = false;
+  soundOnIcon.style.display = "inline-block";
+  soundOffIcon.style.display = "none";
+  setAllSoundsMuted(false);
+
+  // Reset timer and score
+  timerElement.textContent = "00:00";
+  scoreElement.textContent = "Score: 0";
 }
 
 // Initialize the game

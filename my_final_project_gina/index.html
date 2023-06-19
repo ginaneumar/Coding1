@@ -19,7 +19,7 @@
       <button id="start-button">Start Game</button>
     </div>
 
-    <div class="game-container">
+    <div class="game-container" style="display: none">
       <h1>Memory</h1>
 
       <div class="container">
@@ -29,18 +29,21 @@
         </div>
         <div class="button-container">
           <button id="restart-button">Restart</button>
+          <button id="mute-button">
+            <img src="./icons/SoundOn.png" class="sound-on-icon" alt="Sound On" />
+            <img src="./icons/Soundmuted.png" class="sound-off-icon" alt="Sound Off" />
+          </button>
         </div>
       </div>
       <div id="timer">00:00</div>
     </div>
 
-    <!-- <div id="win-screen">
-      <div class="win-screen-content">
-        <h2>Congratulations!</h2>
-        <p>You won the game!</p>
-        <button id="restart-button-win">Play Again</button>
-      </div>
-    </div> -->
+    <div id="win-screen" style="display: none">
+      <h2 id="win-message">Congratulations!</h2>
+      <p id="win-score"></p>
+      <p id="win-time"></p>
+      <button id="restart-button-win">Restart</button>
+    </div>
 
     <script type="text/javascript" src="script.js"></script>
   </body>
