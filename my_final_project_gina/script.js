@@ -22,7 +22,6 @@ const soundOnIcon = document.querySelector("#mute-button .sound-on-icon");
 const soundOffIcon = document.querySelector("#mute-button .sound-off-icon");
 
 const flipSound = new Audio("./sounds/notification-sound-7062.mp3");
-// const collectSound = new Audio("collect_sound.mp3");
 const dealSound = new Audio("./sounds/fast-simple-chop-5-6270.mp3");
 const matchingPair = new Audio("./sounds/game-bonus-144751.mp3");
 const gameSound = new Audio(
@@ -43,7 +42,6 @@ let flippedCards = [];
 let players = [];
 let currentPlayer = 1;
 let isLocked = false;
-let score = 0;
 let timerInterval;
 let startTime;
 let isMuted = false;
@@ -64,149 +62,6 @@ restartButtonWin.addEventListener("click", restartGame);
 
 // adds/removes new inputs for player name
 numPlayersInput.addEventListener("input", updatePlayerInputs);
-
-// Load JSON data and start the game after data is fetched
-function loadCardsAndStartGame(numPairs) {
-  fetch("cards2.json")
-    .then((res) => res.json())
-    .then((data) => {
-      cards = data.slice(0, numPairs); // Slice the data to match the selected number of pairs
-      cards = [...cards, ...cards]; // Create card pairs by duplicating the data
-      shuffleCards();
-      generateCards(numPairs * 2); // Generate double the number of pairs for the grid
-      startTimer();
-    });
-}
-
-function setPlayerAmount() {
-  const playerInputs = Array.from(playerContainer.querySelectorAll("input")); //gets all inputs (player name)
-
-  // Clear existing players array
-  players.length = 0;
-
-  // Add players to the players array
-  playerInputs.forEach(function (input, index) {
-    const playerName = input.value.trim();
-
-    players.push({
-      //add new Player to players object
-      player: playerName || `Player ${index + 1}`, // player: Key, Score: Key
-      score: 0, // O: Value
-    });
-
-    let score = document.createElement("span"); //creates span element for each player, to display score & name
-    score.id = "p" + players[index].player;
-
-    let scoreText = document.createTextNode(players[index].player + " Score: " + 0);
-
-    score.appendChild(scoreText);
-    scoreContainer.appendChild(score);
-  });
-}
-
-// adds/removes new inputs for player name
-function updatePlayerInputs() {
-  const numPlayers = parseInt(numPlayersInput.value);
-
-  // Remove existing player input fields
-  playerContainer.innerHTML = "";
-
-  // Add new player input fields
-  for (let i = 0; i < numPlayers; i++) {
-    const input = document.createElement("input");
-    input.type = "text";
-    input.placeholder = `Player ${i + 1} name`;
-    playerContainer.appendChild(input);
-  }
-}
-
-// Generate cards in the grid
-function generateCards(numPairs) {
-  const numCards = numPairs * 2;
-  const numColumns = Math.ceil(Math.sqrt(numCards));
-  const numRows = Math.ceil(numCards / numColumns);
-
-  if (window.innerWidth <= 875) {
-    gridContainer.style.gridTemplateColumns = `repeat(auto-fit, 90px)`;
-    gridContainer.style.gridTemplateRows = `repeat(${numRows}, 90px)`;
-  } else {
-    gridContainer.style.gridTemplateColumns = `repeat(auto-fit, 120px)`;
-    gridContainer.style.gridTemplateRows = `repeat(${numRows}, 120px)`;
-  }
-
-  gridContainer.innerHTML = ""; // Clear the grid container
-
-  for (let i = 0; i < numCards && i < cards.length; i++) {
-    if (i >= numPairs) {
-      break; // Stop generating cards after reaching the desired number of pairs
-    }
-
-    const card = createCard(i);
-    gridContainer.appendChild(card);
-  }
-}
-
-// Shuffle the cards using the Fisher-Yates algorithm
-function shuffleCards() {
-  for (let i = cards.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [cards[i], cards[j]] = [cards[j], cards[i]];
-  }
-}
-
-// Create a single card element
-function createCard(index) {
-  const card = document.createElement("div");
-  card.classList.add("card");
-  card.setAttribute("data-index", index);
-
-  const frontFace = document.createElement("div");
-  frontFace.classList.add("card-front");
-
-  const frontSideImg = document.createElement("img");
-  frontSideImg.src = "frontside.jpeg";
-  frontFace.appendChild(frontSideImg);
-  card.appendChild(frontFace);
-
-  const backFace = document.createElement("div");
-  backFace.classList.add("card-back");
-
-  const backImg = document.createElement("img");
-  backImg.src = cards[index].image;
-  backImg.style.visibility = "hidden";
-  backImg.style.backgroundColor = "white";
-
-  //test
-  backFace.innerHTML = cards[index].name;
-  //test
-
-  backFace.appendChild(backImg);
-
-  card.appendChild(backFace);
-
-  card.style.visibility = "hidden";
-
-  setTimeout(() => {
-    card.classList.add("deal-animation");
-    card.style.visibility = "visible";
-    setTimeout(() => {
-      card.classList.remove("deal-animation");
-    }, 100);
-
-    const numPairs = cards.length / 2;
-    const animationDuration = numPairs * 500; // Assuming 100ms per card
-
-    dealSound.currentTime = 0; // Reset the current time of the sound
-    dealSound.play(); // Play the deal sound
-    flipSound.volume = 0.008;
-
-    setTimeout(() => {
-      dealSound.pause(); // Pause the deal sound after the calculated duration
-    }, animationDuration);
-  }, index * 100);
-
-  return card;
-}
 
 // Event delegation for card clicks
 gridContainer.addEventListener("click", (event) => {
@@ -237,6 +92,150 @@ gridContainer.addEventListener("click", (event) => {
   }
 });
 
+// Load JSON data and start the game after data is fetched
+function loadCardsAndStartGame(numPairs) {
+  fetch("cards2.json")
+    .then((res) => res.json())
+    .then((data) => {
+      cards = data.slice(0, numPairs); // Slice the data to match the selected number of pairs
+      cards = [...cards, ...cards]; // Create card pairs by duplicating the data
+      shuffleCards();
+      generateCards(numPairs * 2); // Generate double the number of pairs for the grid
+      startTimer();
+    });
+}
+
+//sets amount of playing by name
+function setPlayerAmount() {
+  const playerInputs = Array.from(playerContainer.querySelectorAll("input")); //gets all inputs (player name)
+
+  // Clear existing players array
+  players.length = 0;
+
+  // Add players to the players array
+  playerInputs.forEach(function (input, index) {
+    const playerName = input.value.trim();
+
+    players.push({
+      //add new Player to players object
+      player: playerName || `Player ${index + 1}`, // player: Key, Score: Key
+      score: 0, // O: Value
+    });
+
+    let score = document.createElement("span"); //creates span element for each player, to display score & name
+    score.id = "p" + players[index].player;
+
+    let scoreText = document.createTextNode(
+      players[index].player + " Score: " + 0
+    );
+
+    score.appendChild(scoreText);
+    scoreContainer.appendChild(score);
+  });
+}
+
+// adds/removes new inputs for player name
+function updatePlayerInputs() {
+  const numPlayers = parseInt(numPlayersInput.value);
+
+  // Remove existing player input fields
+  playerContainer.innerHTML = "";
+
+  // Add new player input fields
+  for (let i = 0; i < numPlayers; i++) {
+    const input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = `Player ${i + 1} name`;
+    playerContainer.appendChild(input);
+  }
+}
+
+// Create a single card element
+function createCard(index) {
+  const card = document.createElement("div");
+  card.classList.add("card");
+  card.setAttribute("data-index", index);
+
+  const frontFace = document.createElement("div");
+  frontFace.classList.add("card-front");
+
+  const frontSideImg = document.createElement("img");
+  frontSideImg.src = "frontside.jpeg";
+  frontFace.appendChild(frontSideImg);
+  card.appendChild(frontFace);
+
+  const backFace = document.createElement("div");
+  backFace.classList.add("card-back");
+
+  const backImg = document.createElement("img");
+  backImg.src = cards[index].image;
+  backImg.style.visibility = "hidden";
+  backImg.style.backgroundColor = "white";
+
+  //test
+  // backFace.innerHTML = cards[index].name;
+  //test
+
+  backFace.appendChild(backImg);
+
+  card.appendChild(backFace);
+
+  card.style.visibility = "hidden";
+
+  setTimeout(() => {
+    card.classList.add("deal-animation");
+    card.style.visibility = "visible";
+    setTimeout(() => {
+      card.classList.remove("deal-animation");
+    }, 100);
+
+    const numPairs = cards.length / 2;
+    const animationDuration = numPairs * 500; // Assuming 100ms per card
+
+    dealSound.currentTime = 0; // Reset the current time of the sound
+    dealSound.play(); // Play the deal sound
+    flipSound.volume = 0.008;
+
+    setTimeout(() => {
+      dealSound.pause(); // Pause the deal sound after the calculated duration
+    }, animationDuration);
+  }, index * 100);
+
+  return card;
+}
+
+// Generate cards in the grid
+function generateCards(numPairs) {
+  const numCards = numPairs * 2;
+  const numColumns = Math.ceil(Math.sqrt(numCards));
+  const numRows = Math.ceil(numCards / numColumns);
+
+  //set the card sizes
+  if (window.innerWidth <= 675) {
+    gridContainer.style.gridTemplateColumns = `repeat(auto-fit, 45px)`;
+    gridContainer.style.gridTemplateRows = `repeat(${numRows}, 45px)`;
+  } else {
+    gridContainer.style.gridTemplateColumns = `repeat(auto-fit, 85px)`;
+    gridContainer.style.gridTemplateRows = `repeat(${numRows}, 85px)`;
+  }
+
+  gridContainer.innerHTML = ""; // Clear the grid container
+
+  for (let i = 0; i < numCards && i < cards.length; i++) {
+    if (i >= numPairs) {
+      break; // Stop generating cards after reaching the desired number of pairs
+    }
+
+    const card = createCard(i);
+    gridContainer.appendChild(card);
+  }
+}
+
+// Shuffle the cards
+function shuffleCards() {
+  cards.sort(() => Math.random() - 0.5);
+}
+
 // Compare the flipped cards
 function compareCards() {
   if (flippedCards.length === 2) {
@@ -264,6 +263,7 @@ function compareCards() {
       if (currentPlayer == players.length)
         currentPlayer = 1; //if last player in list then start from beginging
       else currentPlayer++;
+
       setTimeout(() => {
         flipCard(card1);
         flipCard(card2);
@@ -307,7 +307,7 @@ function createHighscore() {
       }); //adds new entry to highScoreList
     }
 
-    multipHighScoreList.sort((a, b) => b.highScore - a.highScore); //sort array by DESC
+    multipHighScoreList.sort((player1, player2) => player2.highScore - player1.highScore); //sort array by DESC
 
     if (multipHighScoreList.length > 10) {
       multipHighScoreList.splice(10); //remove every element after index 10
@@ -328,7 +328,21 @@ function createHighscore() {
       time: timerText,
     }); //adds new entry to highScoreList
 
-    singlepHighScoreList.sort((a, b) => b.time - a.time); //sort array by DESC
+    singlepHighScoreList.sort((player1, player2) => {
+      //time sort
+      const timeA = player1.time.slice(6); // slice after "Time:"
+      const timeB = player2.time.slice(6); //
+
+      const [minutesA, secondsA] = timeA.split(":").map(Number); // convert the minutes and seconds strings into numbers.
+      const [minutesB, secondsB] = timeB.split(":").map(Number);
+
+      // Compare the minutes and seconds
+      if (minutesA !== minutesB) {
+        return minutesA - minutesB; // Sort by minutes in ascending order
+      } else {
+        return secondsA - secondsB; // Sort by seconds in ascending order if minutes are equal
+      }
+    });
 
     if (singlepHighScoreList.length > 10) {
       singlepHighScoreList.splice(10); //remove every element after index 10
@@ -373,7 +387,7 @@ function displayHighscore() {
     }
   }
 }
-
+// Fills list with local Storage list
 function getLocalStorageItems() {
   const tmpMultipHighScoreList = JSON.parse(
     localStorage.getItem("MultiplayerHighscores")
@@ -408,7 +422,7 @@ function checkGameEnd() {
     winScreen.style.display = "block";
   }
 }
-
+//Check which players turn
 function setCurrentPlayer() {
   for (let i = 1; i <= players.length; i++) {
     const score = document.getElementById("p" + players[i - 1].player);
@@ -420,12 +434,12 @@ function setCurrentPlayer() {
 function updateScore() {
   let score = document.getElementById("p" + players[currentPlayer - 1].player);
   players[currentPlayer - 1].score++;
-  if (players[currentPlayer - 1].player != null) {
+  if (players[currentPlayer - 1].player != null) { //currentPlayer - 1, bc of array index starts at 0
     score.innerHTML =
       players[currentPlayer - 1].player +
       " Score: " +
       players[currentPlayer - 1].score;
-  } else {
+  } else { //for "Player 1"
     score.innerHTML =
       "Player " +
       currentPlayer -
@@ -516,7 +530,6 @@ function toggleMute() {
 
 function setAllSoundsMuted(muted) {
   flipSound.muted = muted;
-  // collectSound.muted = muted;
   dealSound.muted = muted;
   matchingPair.muted = muted;
   gameSound.muted = muted;
@@ -553,8 +566,6 @@ function restartGame() {
   // Stop and reset all sounds
   flipSound.pause();
   flipSound.currentTime = 0;
-  // collectSound.pause();
-  // collectSound.currentTime = 0;
   dealSound.pause();
   dealSound.currentTime = 0;
   matchingPair.pause();
@@ -572,10 +583,10 @@ function restartGame() {
   timerElement.textContent = "00:00";
 }
 
-// Initialize the game
+// Initialize the game, call at start of page reload
 function init() {
   getLocalStorageItems();
-  updatePlayerInputs();
+  updatePlayerInputs(); //display inputfield at start
   difficultyContainer.style.display = "block";
   gameContainer.style.display = "none";
 }
