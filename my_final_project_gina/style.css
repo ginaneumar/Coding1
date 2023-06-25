@@ -1,55 +1,138 @@
+body {
+  font-family: "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  background-color: #f7f7f7; 
+  color: #333; 
+}
+
 h1 {
   font-size: 50px;
   text-align: center;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #333; 
+  margin-bottom: 20px;
 }
+
+#start-button {
+  padding: 10px 20px;
+  font-size: 20px;
+  background-color: #d32f2f;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#start-button:hover {
+  background-color: #b71c1c;
+}
+
+#start-button:active {
+  background-color: #ff5252;
+}
+
 
 .container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  margin-bottom: 20px;
+}
+
+#timer {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  font-size: 20px;
+  color: #fff;
+  background-color: #cc0033; /* Red timer background */
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+.score-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  position: fixed;
+  top: 10px;
+  right: 30px;
+}
+
+#score {
+  font-size: 20px;
+  margin-right: 10px;
+  color: #cc0033; /* Red score color */
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+}
+
+#restart-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #cc0033; /* Red restart button background */
+  border: none;
+  border-radius: 4px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #fff; /* White restart button text color */
 }
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(8, 140px);
-  grid-template-rows: repeat(5, 140px);
+  /* grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-auto-rows: minmax(100px, 1fr); */
   gap: 10px;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   position: relative;
+  margin-bottom: 20px;
+  /* min-height: calc(100vh - 150px); */
+  max-height: calc(100vh - 150px);
+  max-width: 80vw;
 }
-
-
-#restart-button {
-  margin-left: 50px; /* Adjust the margin for spacing */
-  margin-top: 10px; /* Add margin to move the button up */
-  padding: 20px 20px;
-  background-color: #f5f5f5;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  font-size: 24px;
-  cursor: pointer;
-  align-self: flex-end; /* Position the button at the bottom */
-}
-
 
 .card {
   position: relative;
-  border: 1px solid #000;
+  border: 1px solid #000000; 
   border-radius: 5px;
   overflow: hidden;
-  width: 100%;
-  height: 100%;
+  /* width: 100%; */
+  /* height: 100%; */
   transform-style: preserve-3d;
   transition: transform 0.5s;
   cursor: pointer;
 }
 
+.card:before {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+
+.card.deal-animation {
+  animation: dealAnimation 0.3s ease forwards;
+}
+
+.card.deal-animation.finished {
+  transform: translate(0, 0);
+  opacity: 1;
+}
+
 .card-front,
 .card-back {
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
   position: absolute;
   top: 0;
   left: 0;
@@ -58,6 +141,7 @@ h1 {
 
 .card-front {
   transform: rotateY(0deg);
+  background-color: #fff; /* White card front background */
 }
 
 .card-back {
@@ -75,4 +159,224 @@ h1 {
   height: 100%;
   object-fit: cover;
 }
+
+@keyframes dealAnimation {
+  0% {
+    transform: translate(-100%, -100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+
+.difficulty-container {
+  text-align: center;
+  margin-top: 100px;
+}
+
+.game-container {
+  display: none;
+}
+
+#mute-button {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#mute-button img {
+  width: 100%;
+  height: 100%;
+}
+
+#mute-button.active img.sound-off-icon {
+  display: block;
+}
+
+#mute-button.active img.sound-on-icon {
+  display: none;
+}
+
+#mute-button:not(.active) img.sound-off-icon {
+  display: none;
+}
+
+#mute-button:not(.active) img.sound-on-icon {
+  display: block;
+}
+
+#win-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  text-align: center;
+}
+
+#win-screen h2 {
+  font-size: 26px;
+  margin: 10px 0 16px;
+}
+
+#win-screen p {
+  font-size: 20px;
+  margin: 20px 0 24px;
+}
+
+#win-screen button {
+  padding: 12px 24px;
+  font-size: 20px;
+  background-color: #cc0033; /* Red win screen button background */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.multip-high-score-container,
+.singlep-high-score-container {
+  background-color: #cc0033; /* Red high score container background */
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.h3 .multip-high-score-container,
+.singlep-high-score-container {
+  font-weight: bold;
+}
+
+
+
+/* Other styles */
+
+@media screen and (max-width: 768px) {
+  h1 {
+    font-size: 40px; /* Decrease the font size of the headline */
+  }
+
+  #score {
+    margin-top: 10px; /* Adjust the margin-top for the score */
+  }
+
+  .button-container {
+    flex-direction: column; /* Change the direction to display buttons vertically */
+    align-items: center; /* Center align the buttons */
+    margin-right: 0;
+    margin-top: 20px; /* Add margin-top to create space between the grid and the buttons */
+    position: relative; /* Change position to relative */
+  }
+
+  #score {
+    margin-top: 10px; /* Add margin-top to create space between the grid and the score */
+    margin-bottom: 10px; /* Add margin-bottom to create space between the score and the buttons */
+    position: absolute; /* Change position to absolute */
+    bottom: 0; /* Position the score at the bottom */
+    left: 50%; /* Center align the score horizontally */
+    transform: translateX(-50%); /* Adjust horizontal center alignment */
+  }
+
+  #restart-button {
+    margin-top: 50px; /* Add margin-top to create space between the score and the restart button */
+    margin-right: 0;
+  }
+
+  #mute-button {
+    margin-top: 50px; /* Add margin-top to create space between the buttons */
+    position: relative; /* Change position to relative */
+    bottom: auto; /* Reset the bottom position */
+    left: auto; /* Reset the left position */
+  }
+
+  /* Other styles */
+}
+
+/* Other styles */
+
+
+
+
+
+
+
+
+/* @media screen and (max-width: 480px) {
+  #score {
+    font-size: 14px;
+    position: fixed;
+    top: 10px;
+    right: 50%;
+    transform: translateX(50%);
+    margin: 0;
+  }
+
+  .button-container {
+    justify-content: center;
+    margin-right: 0;
+    margin-bottom: 20px;
+    position: fixed;
+    bottom: 10px;
+    right: 50%;
+    transform: translateX(50%);
+  }
+
+  #restart-button {
+    margin-top: 0;
+    margin-right: 10px;
+  }
+
+  #mute-button {
+    width: 30px;
+    height: 30px;
+  }
+
+  #mute-button img {
+    width: 70%;
+    height: 70%;
+  }
+} */
+
+
+/* @media screen and (max-width: 600px) {
+  .grid-container {
+    grid-template-rows: auto auto;
+  }
+
+  .score-container {
+    position: static;
+    margin-top: 10px;
+  }
+
+  #score {
+    font-size: 16px;
+    margin-right: 0;
+    margin-bottom: 5px;
+  }
+
+  #restart-button {
+    margin-top: 10px; 
+  }
+}  
+*/
+
+
+
 

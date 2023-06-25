@@ -8,12 +8,65 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
   <body>
-    <h1>Memory</h1>
-    <div class="container">
-      <div class="grid-container">
-        
+    <div class="difficulty-container">
+      <div class="player-mode-container">
+        <label for="num-players">Number of Players:</label>
+        <br />
+        <input type="number" id="num-players" min="1" value="2" />
       </div>
-      <button id="restart-button">Restart</button>
+
+      <div id="player-container"></div>
+      <br />
+
+      <label for="difficulty">Difficulty:</label>
+      <select id="difficulty">
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+        <option value="extra-hard">Extra Hard</option>
+      </select>
+      <br />
+      <br />
+      <button id="start-button">Start Game</button>
+    </div>
+
+    <div class="game-container" style="display: none">
+      <h1>Memory</h1>
+
+      <div class="container">
+        <div class="grid-container"></div>
+        <div class="score-container"></div>
+        <div class="button-container">
+          <button id="restart-button">Restart</button>
+          <button id="mute-button">
+            <img
+              src="./icons/SoundOn.png"
+              class="sound-on-icon"
+              alt="Sound On"
+            />
+            <img
+              src="./icons/Soundmuted.png"
+              class="sound-off-icon"
+              alt="Sound Off"
+            />
+          </button>
+        </div>
+      </div>
+      <div id="timer">00:00</div>
+    </div>
+
+    <div id="win-screen" style="display: none">
+      <h2 id="win-message">Congratulations!</h2>
+      <div class="multip-high-score-container">
+        <h3>Multiplayer Highscore</h3>
+      </div>
+      <div class="singlep-high-score-container">
+        <h3>Singleplayer Highscore</h3>
+      </div>
+      <p id="win-player"></p>
+      <p id="win-score"></p>
+      <p id="win-time"></p>
+      <button id="restart-button-win">Restart</button>
     </div>
 
     <script type="text/javascript" src="script.js"></script>
