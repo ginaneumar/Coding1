@@ -3,9 +3,18 @@ const gridContainer = document.querySelector(".grid-container");
 const timerElement = document.querySelector("#timer");
 const scoreElement = document.querySelector("#score");
 const difficultyContainer = document.querySelector(".difficulty-container");
+const scoreContainer = document.querySelector(".score-container");
+const multipHighScoreContainer = document.querySelector(
+  ".multip-high-score-container"
+);
+const singlepHighScoreContainer = document.querySelector(
+  ".singlep-high-score-container"
+);
 const gameContainer = document.querySelector(".game-container");
 const startButton = document.querySelector("#start-button");
 const restartButton = document.querySelector("#restart-button");
+const numPlayersInput = document.getElementById("num-players");
+const playerContainer = document.getElementById("player-container");
 
 //Sound
 const muteButton = document.querySelector("#mute-button");
@@ -13,29 +22,34 @@ const soundOnIcon = document.querySelector("#mute-button .sound-on-icon");
 const soundOffIcon = document.querySelector("#mute-button .sound-off-icon");
 
 const flipSound = new Audio("./sounds/notification-sound-7062.mp3");
-const collectSound = new Audio("collect_sound.mp3");
+// const collectSound = new Audio("collect_sound.mp3");
 const dealSound = new Audio("./sounds/fast-simple-chop-5-6270.mp3");
 const matchingPair = new Audio("./sounds/game-bonus-144751.mp3");
 const gameSound = new Audio(
   "./sounds/comfort-atmosphere-pleasant-atmosphere-deep-thought-153275.mp3"
 );
+gameSound.loop = true;
 
-//win
+//winscreen
 const winScreen = document.getElementById("win-screen");
+const highScore = document.getElementById("high-score");
 const winScore = document.getElementById("win-score");
 const winTime = document.getElementById("win-time");
 const restartButtonWin = document.getElementById("restart-button-win");
 
-gameSound.loop = true;
-
 //variables
 let cards = [];
 let flippedCards = [];
+let players = [];
+let currentPlayer = 1;
 let isLocked = false;
 let score = 0;
 let timerInterval;
 let startTime;
 let isMuted = false;
+let multipHighScoreList = [];
+let singlepHighScoreList = [];
+let currentTimer;
 
 // Start game button event listener
 startButton.addEventListener("click", startGame);
@@ -48,9 +62,12 @@ muteButton.addEventListener("click", toggleMute);
 
 restartButtonWin.addEventListener("click", restartGame);
 
+// adds/removes new inputs for player name
+numPlayersInput.addEventListener("input", updatePlayerInputs);
+
 // Load JSON data and start the game after data is fetched
 function loadCardsAndStartGame(numPairs) {
-  fetch("cards.json")
+  fetch("cards2.json")
     .then((res) => res.json())
     .then((data) => {
       cards = data.slice(0, numPairs); // Slice the data to match the selected number of pairs
@@ -61,16 +78,63 @@ function loadCardsAndStartGame(numPairs) {
     });
 }
 
+function setPlayerAmount() {
+  const playerInputs = Array.from(playerContainer.querySelectorAll("input")); //gets all inputs (player name)
+
+  // Clear existing players array
+  players.length = 0;
+
+  // Add players to the players array
+  playerInputs.forEach(function (input, index) {
+    const playerName = input.value.trim();
+
+    players.push({
+      //add new Player to players object
+      player: playerName || `Player ${index + 1}`, // player: Key, Score: Key
+      score: 0, // O: Value
+    });
+
+    let score = document.createElement("span"); //creates span element for each player, to display score & name
+    score.id = "p" + players[index].player;
+
+    let scoreText = document.createTextNode(players[index].player + " Score: " + 0);
+
+    score.appendChild(scoreText);
+    scoreContainer.appendChild(score);
+  });
+}
+
+// adds/removes new inputs for player name
+function updatePlayerInputs() {
+  const numPlayers = parseInt(numPlayersInput.value);
+
+  // Remove existing player input fields
+  playerContainer.innerHTML = "";
+
+  // Add new player input fields
+  for (let i = 0; i < numPlayers; i++) {
+    const input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = `Player ${i + 1} name`;
+    playerContainer.appendChild(input);
+  }
+}
+
 // Generate cards in the grid
 function generateCards(numPairs) {
   const numCards = numPairs * 2;
   const numColumns = Math.ceil(Math.sqrt(numCards));
   const numRows = Math.ceil(numCards / numColumns);
 
-  gridContainer.innerHTML = ""; // Clear the grid container
+  if (window.innerWidth <= 875) {
+    gridContainer.style.gridTemplateColumns = `repeat(auto-fit, 90px)`;
+    gridContainer.style.gridTemplateRows = `repeat(${numRows}, 90px)`;
+  } else {
+    gridContainer.style.gridTemplateColumns = `repeat(auto-fit, 120px)`;
+    gridContainer.style.gridTemplateRows = `repeat(${numRows}, 120px)`;
+  }
 
-  gridContainer.style.gridTemplateColumns = `repeat(auto-fit, 140px)`;
-  gridContainer.style.gridTemplateRows = `repeat(${numRows}, 140px)`;
+  gridContainer.innerHTML = ""; // Clear the grid container
 
   for (let i = 0; i < numCards && i < cards.length; i++) {
     if (i >= numPairs) {
@@ -190,15 +254,16 @@ function compareCards() {
         clearCard(card1);
         clearCard(card2);
 
-        checkGameEnd();
-
-        score++;
-
         updateScore();
+        checkGameEnd();
 
         isLocked = false;
       }, 1000);
     } else {
+      //if player failed, next player => currentPlayer + 1
+      if (currentPlayer == players.length)
+        currentPlayer = 1; //if last player in list then start from beginging
+      else currentPlayer++;
       setTimeout(() => {
         flipCard(card1);
         flipCard(card2);
@@ -209,6 +274,7 @@ function compareCards() {
 
     flippedCards = [];
   }
+  setCurrentPlayer();
 }
 
 // Clear the card by removing its content
@@ -229,12 +295,104 @@ function flipCard(card) {
   }, 100);
 }
 
+function createHighscore() {
+  if (players.length > 1) {
+    for (let i = 0; i < players.length; i++) {
+      //players list iterate (of gets the value)
+
+      multipHighScoreList.push({
+        //created new entry
+        player: players[i].player,
+        highScore: players[i].score,
+      }); //adds new entry to highScoreList
+    }
+
+    multipHighScoreList.sort((a, b) => b.highScore - a.highScore); //sort array by DESC
+
+    if (multipHighScoreList.length > 10) {
+      multipHighScoreList.splice(10); //remove every element after index 10
+    }
+    //JSON.stringify parse to json format (localStorage)
+    localStorage.setItem(
+      "MultiplayerHighscores",
+      JSON.stringify(multipHighScoreList)
+    ); //add highScoreList to localStorage
+  } else {
+    //players list iterate (of gets the value)
+    const timerText = winTime.textContent;
+
+    singlepHighScoreList.push({
+      //created new entry
+      player: players[0].player,
+      highScore: players[0].score,
+      time: timerText,
+    }); //adds new entry to highScoreList
+
+    singlepHighScoreList.sort((a, b) => b.time - a.time); //sort array by DESC
+
+    if (singlepHighScoreList.length > 10) {
+      singlepHighScoreList.splice(10); //remove every element after index 10
+    }
+    //JSON.stringify parse to json format (localStorage)
+    localStorage.setItem(
+      "SingleplayerHighscores",
+      JSON.stringify(singlepHighScoreList)
+    ); //add highScoreList to localStorage
+  }
+}
+
+function displayHighscore() {
+  let tmpMultipHighScoreList = JSON.parse(
+    localStorage.getItem("MultiplayerHighscores")
+  ); //gets highScoreList from localStorage
+  if (tmpMultipHighScoreList != null) {
+    //not empty
+    for (let index in tmpMultipHighScoreList) {
+      // (in gets the index)
+      const scoreDiv = document.createElement("div");
+      scoreDiv.textContent = `${parseInt(index) + 1}. Highscore of ${
+        tmpMultipHighScoreList[index].player
+      } Scored: ${tmpMultipHighScoreList[index].highScore}`;
+      multipHighScoreContainer.appendChild(scoreDiv);
+    }
+  }
+  let tmpSinglepHighScoreList = JSON.parse(
+    localStorage.getItem("SingleplayerHighscores")
+  ); //gets highScoreList from localStorage
+  if (tmpSinglepHighScoreList != null) {
+    //not empty
+    for (let index in tmpSinglepHighScoreList) {
+      // (in gets the index)
+      const scoreDiv = document.createElement("div");
+      scoreDiv.textContent = `${parseInt(index) + 1}. Highscore of ${
+        tmpSinglepHighScoreList[index].player
+      } Scored: ${tmpSinglepHighScoreList[index].highScore} in: ${
+        tmpSinglepHighScoreList[index].time
+      }`;
+      singlepHighScoreContainer.appendChild(scoreDiv);
+    }
+  }
+}
+
+function getLocalStorageItems() {
+  const tmpMultipHighScoreList = JSON.parse(
+    localStorage.getItem("MultiplayerHighscores")
+  );
+  if (tmpMultipHighScoreList != null)
+    multipHighScoreList = tmpMultipHighScoreList;
+
+  const tmpSinglepHighScoreList = JSON.parse(
+    localStorage.getItem("SingleplayerHighscores")
+  );
+  if (tmpSinglepHighScoreList != null)
+    singlepHighScoreList = tmpSinglepHighScoreList;
+}
+
 // Check if the game has ended
 function checkGameEnd() {
   const flippedCards = document.querySelectorAll(".card.flipped");
 
   if (flippedCards.length === cards.length) {
-    console.log("Game Over!");
     stopTimer();
 
     const endTime = new Date().getTime();
@@ -242,17 +400,39 @@ function checkGameEnd() {
     const minutes = Math.floor(elapsedTime / 60);
     const seconds = Math.floor(elapsedTime % 60);
 
-    winScore.textContent = `Score: ${score + 1}`;
     winTime.textContent = `Time: ${formatTime(minutes)}:${formatTime(seconds)}`;
+    createHighscore();
+    displayHighscore();
 
     gameContainer.style.display = "none";
     winScreen.style.display = "block";
   }
 }
 
+function setCurrentPlayer() {
+  for (let i = 1; i <= players.length; i++) {
+    const score = document.getElementById("p" + players[i - 1].player);
+    score.style.fontWeight = i === currentPlayer ? "bold" : "normal"; //the currentPlayer equals to index gets bold
+  }
+}
+
 // Update the score element
 function updateScore() {
-  scoreElement.textContent = `Score: ${score}`;
+  let score = document.getElementById("p" + players[currentPlayer - 1].player);
+  players[currentPlayer - 1].score++;
+  if (players[currentPlayer - 1].player != null) {
+    score.innerHTML =
+      players[currentPlayer - 1].player +
+      " Score: " +
+      players[currentPlayer - 1].score;
+  } else {
+    score.innerHTML =
+      "Player " +
+      currentPlayer -
+      1 +
+      " Score: " +
+      players[currentPlayer - 1].score;
+  }
 }
 
 // Start the timer
@@ -283,6 +463,9 @@ function stopTimer() {
 
 // Start the game with the selected difficulty
 function startGame() {
+  difficultyContainer.style.display = "none";
+  gameContainer.style.display = "block";
+  setPlayerAmount();
   const difficultySelect = document.querySelector("#difficulty");
   const selectedDifficulty = difficultySelect.value;
   let numPairs;
@@ -307,16 +490,14 @@ function startGame() {
   flippedCards = [];
   isLocked = false;
   score = 0;
-  updateScore();
+  // updateScore();
   stopTimer();
 
   loadCardsAndStartGame(numPairs);
 
   gameSound.play();
   gameSound.volume = 0.008;
-
-  difficultyContainer.style.display = "none";
-  gameContainer.style.display = "block";
+  setCurrentPlayer();
 }
 
 function toggleMute() {
@@ -335,7 +516,7 @@ function toggleMute() {
 
 function setAllSoundsMuted(muted) {
   flipSound.muted = muted;
-  collectSound.muted = muted;
+  // collectSound.muted = muted;
   dealSound.muted = muted;
   matchingPair.muted = muted;
   gameSound.muted = muted;
@@ -345,12 +526,25 @@ function setAllSoundsMuted(muted) {
 function restartGame() {
   winScreen.style.display = "none";
   difficultyContainer.style.display = "block";
+  gameContainer.style.display = "none";
 
   // Reset game variables
   flippedCards = [];
   isLocked = false;
   score = 0;
-  updateScore();
+  players = [];
+  currentPlayer = 1;
+
+  while (multipHighScoreContainer.firstChild) {
+    multipHighScoreContainer.removeChild(multipHighScoreContainer.firstChild);
+  }
+  while (singlepHighScoreContainer.firstChild) {
+    singlepHighScoreContainer.removeChild(singlepHighScoreContainer.firstChild);
+  }
+  while (scoreContainer.firstChild) {
+    scoreContainer.removeChild(scoreContainer.firstChild);
+  }
+  // updateScore();
   stopTimer();
 
   // Clear the grid container
@@ -359,8 +553,8 @@ function restartGame() {
   // Stop and reset all sounds
   flipSound.pause();
   flipSound.currentTime = 0;
-  collectSound.pause();
-  collectSound.currentTime = 0;
+  // collectSound.pause();
+  // collectSound.currentTime = 0;
   dealSound.pause();
   dealSound.currentTime = 0;
   matchingPair.pause();
@@ -376,11 +570,12 @@ function restartGame() {
 
   // Reset timer and score
   timerElement.textContent = "00:00";
-  scoreElement.textContent = "Score: 0";
 }
 
 // Initialize the game
 function init() {
+  getLocalStorageItems();
+  updatePlayerInputs();
   difficultyContainer.style.display = "block";
   gameContainer.style.display = "none";
 }
