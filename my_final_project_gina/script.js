@@ -34,6 +34,7 @@ const winScreen = document.getElementById("win-screen");
 const highScore = document.getElementById("high-score");
 const winScore = document.getElementById("win-score");
 const winTime = document.getElementById("win-time");
+const winPlayer = document.getElementById("win-player");
 const restartButtonWin = document.getElementById("restart-button-win");
 
 //variables
@@ -173,7 +174,7 @@ function createCard(index) {
   backImg.style.backgroundColor = "white";
 
   //test
-  // backFace.innerHTML = cards[index].name;
+  backFace.innerHTML = cards[index].name;
   //test
 
   backFace.appendChild(backImg);
@@ -307,7 +308,9 @@ function createHighscore() {
       }); //adds new entry to highScoreList
     }
 
-    multipHighScoreList.sort((player1, player2) => player2.highScore - player1.highScore); //sort array by DESC
+    multipHighScoreList.sort(
+      (player1, player2) => player2.highScore - player1.highScore
+    ); //sort array by DESC
 
     if (multipHighScoreList.length > 10) {
       multipHighScoreList.splice(10); //remove every element after index 10
@@ -415,6 +418,15 @@ function checkGameEnd() {
     const seconds = Math.floor(elapsedTime % 60);
 
     winTime.textContent = `Time: ${formatTime(minutes)}:${formatTime(seconds)}`;
+    let highestScorePlayer = null; // Variable to store the player with the highest score
+
+    players.forEach((player) => {
+      if (highestScorePlayer === null || player.score > highestScorePlayer.score) {
+        highestScorePlayer = player; // Update the highestScorePlayer if the current player has a higher score
+      }
+    });
+    
+    winPlayer.textContent = `Player ${highestScorePlayer.player} won with Score: ${highestScorePlayer.score}`
     createHighscore();
     displayHighscore();
 
@@ -434,12 +446,14 @@ function setCurrentPlayer() {
 function updateScore() {
   let score = document.getElementById("p" + players[currentPlayer - 1].player);
   players[currentPlayer - 1].score++;
-  if (players[currentPlayer - 1].player != null) { //currentPlayer - 1, bc of array index starts at 0
+  if (players[currentPlayer - 1].player != null) {
+    //currentPlayer - 1, bc of array index starts at 0
     score.innerHTML =
       players[currentPlayer - 1].player +
       " Score: " +
       players[currentPlayer - 1].score;
-  } else { //for "Player 1"
+  } else {
+    //for "Player 1"
     score.innerHTML =
       "Player " +
       currentPlayer -
